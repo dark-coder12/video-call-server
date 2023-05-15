@@ -11,7 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const io = new Server(server, {
   cors: {
-    origin: "https://example.com",
+    origin: "http://localhost:3000/",
     allowedHeaders: ["my-custom-header"],
     credentials: true
   }
