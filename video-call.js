@@ -41,7 +41,10 @@ io.on("connection", (socket) => {
 
   socket.on("answerCall", (data) => {
     console.log(`Answering call from ${data.from}`);
-    io.to(data.to).emit("callAccepted", data.signal);
+    io.to(data.to).emit("callAccepted", {
+      signal: data.signal,
+      from: socket.id, // Assuming you want to send the ID of the answering socket
+    });
   });
 });
 
