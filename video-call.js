@@ -13,7 +13,14 @@ const io = new Server(server, {
     origin: "*",
     allowedHeaders: ["my-custom-header"],
     credentials: true
-  }
+  },
+  iceServers: [
+    {
+      urls: 'turn:openrelay.metered.ca:80',
+      username: 'openrelayproject',
+      credentials: 'openrelayproject'
+    },
+  ],
 });
 
 io.on("connection", (socket) => {
