@@ -13,17 +13,7 @@ app.use(cors({
     }
 ))
 
-const io = require("socket.io")(server, {
-  handlePreflightRequest: (req, res) => {
-      const headers = {
-          "Access-Control-Allow-Headers": "Content-Type, Authorization",
-          "Access-Control-Allow-Origin": req.headers.origin || "http://localhost:3000/video-call", //or the specific origin you want to give access to,
-          "Access-Control-Allow-Credentials": true
-      };
-      res.writeHead(200, headers);
-      res.end();
-  }
-});
+const io = socketio(server, { cors: { origin: '*' } });
 
 io.on("connection", (socket) => {
   socket.emit("me", socket.id);
