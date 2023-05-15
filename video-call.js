@@ -8,12 +8,15 @@ const cors = require("cors");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors({
-        origin: "*"
-    }
-))
 
-const io = socketio(server, { cors: { origin: '*' } });
+const io = require("socket.io")(httpServer, {
+  cors: {
+    origin: "https://example.com",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["my-custom-header"],
+    credentials: true
+  }
+});
 
 io.on("connection", (socket) => {
   socket.emit("me", socket.id);
