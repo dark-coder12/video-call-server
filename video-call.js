@@ -1,26 +1,18 @@
 const express = require("express");
+const http = require("http");
 const app = express();
+const server = http.createServer(app);
+
+const cors = require("cors");
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const { createServer } = require("http");
-const { Server } = require("socket.io");
-
-const server = createServer();
-
-const io = new Server(server, {
+const io = require("socket.io")(server, {
   cors: {
     origin: "*",
-    allowedHeaders: ["my-custom-header"],
-    credentials: true
+    methods: ["GET", "POST"],
   },
-  iceServers: [
-    {
-      urls: 'turn:openrelay.metered.ca:80',
-      username: 'openrelayproject',
-      credentials: 'openrelayproject'
-    },
-  ],
 });
 
 io.on("connection", (socket) => {
@@ -41,11 +33,8 @@ io.on("connection", (socket) => {
 
   socket.on("answerCall", (data) => {
     console.log(`Answering call from ${data.from}`);
-    io.to(data.to).emit("callAccepted", {
-      signal: data.signal,
-      from: socket.id, // Assuming you want to send the ID of the answering socket
-    });
+    io.to(data.to).emit("callAccepted", data.signal);
   });
 });
 
-server.listen(5000, '0.0.0.0', () => console.log("Running now!!"));
+server.listen(5000, () => console.log("server is running on port 5000"));
